@@ -51,6 +51,7 @@ $(function(){
 				$widget.appendTo($container);
 				
 				if(repo.has_issues && repo.open_issues > 0) {
+					$issues_table.html('');
 					$.ajax({
 						url: 'https://api.github.com/repos/' + repo_name + "/issues?state=open&per_page=5&page=1&sort=updated",
 						dataType: 'jsonp',
