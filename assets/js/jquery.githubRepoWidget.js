@@ -13,6 +13,7 @@ $(function(){
 
 		var $container = $(this);
 		var repo_name = $container.data('repo');
+		var issu = $container.data('issu');
 
 		$.ajax({
 			url: 'https://api.github.com/repos/' + repo_name,
@@ -36,7 +37,7 @@ $(function(){
 					        Fork<a class="forks" title="Forks" href="' + repo.url.replace('api.','').replace('repos/','') + '/network" target="_blank">' + repo.forks + '</a> \
 					        </div> \
 					    </div> \
-					    <div class="github-box-content"> \
+					    <div class="'+issu+'"> \
 					        <p class="description">' + repo.description + ' &mdash; <a href="' + repo.url.replace('api.','').replace('repos/','') + '#readme"  target="_blank">More...</a></p> \
 					        <p class="link"><a href="' + repo.homepage + '">' + repo.homepage + '</a></p> \
 					        <table class="issues" width="100%"></table> \
@@ -51,14 +52,15 @@ $(function(){
 				$widget.appendTo($container);
 				
 				if(repo.has_issues && repo.open_issues > 0) {
-					$issues_table.html('');
+					
 					$.ajax({
 						url: 'https://api.github.com/repos/' + repo_name + "/issues?state=open&per_page=5&page=1&sort=updated",
 						dataType: 'jsonp',
 						success: function(results){
 							var issues = results.data;
-							var $issues_table = $(".github-box-content table");
+							var $issues_table = $("."+issu+" table ");
 							$issues_table.append('<tr><td colspan="2"><a href="' + repo.html_url + '/issues" target="_blank"><strong>Issues</strong></a></td></tr>');
+
 							for(var i=0;i<issues.length;i++) {
 								var updated_at = issues[i].updated_at.substr(0,10);
 								$issues_table.append('<tr> \
